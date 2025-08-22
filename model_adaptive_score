@@ -1,0 +1,113 @@
+##### FULL CODE with model #####
+
+# ============================
+# 📌 Adaptive Credit Scoring Engine - Colab Code
+# ============================
+
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+import joblib   # ✅ for saving and loading models
+
+# ----------------------------
+# 1) Load Engineered Unified Dataset
+# ----------------------------
+df = pd.read_csv("/content/drive/MyDrive/unified_dataset_engineered.csv")
+print("Dataset shape:", df.shape)
+print(df.head(5))
+
+# ----------------------------
+# 2) Select Features & Target
+# ----------------------------
+feature_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+feature_cols = [c for c in feature_cols if c not in ['issuer_id', 'credit_score']]
+
+X = df[feature_cols]
+
+if 'credit_score' not in df.columns:
+    df['credit_score'] = (
+        (1 - df.get('debt_ratio', 0)) * 50 +
+        (1 - df.get('late_30_59', 0)) * 25 +
+        df.get('news_pos_ratio', 0) * 25
+    )
+
+y = df['credit_score']
+
+# ----------------------------
+# 3) Split Train/Test
+# ----------------------------
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# ----------------------------
+# 4) Train Decision Tree Regressor
+# ----------------------------
+dt_model = DecisionTreeRegressor(max_depth=5, random_state=42)
+dt_model.fit(X_train, y_train)
+
+# ✅ Save trained model
+model_path = "decision_tree_credit_model.pkl"
+joblib.dump(dt_model, model_path)
+print(f"✅ Model saved as: {model_path}")
+
+# Predict on test set
+y_pred = dt_model.predict(X_test)
+
+# Evaluate model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+n = X_test.shape[0]   # number of samples
+p = X_test.shape[1]   # number of predictors
+adj_r2 = 1 - (1 - r2) * (n - 1) / (n - p - 1)
+
+print("MSE:", mse)
+print("R2 Score:", r2)
+print("Adjusted R2 Score:", adj_r2)
+
+# ----------------------------
+# 5) Assign Creditworthiness Score (0-100 scale)
+# ----------------------------
+pred_scaled = 100 * (y_pred - y_pred.min()) / (y_pred.max() - y_pred.min())
+df_test = X_test.copy()
+df_test['creditworthiness_score'] = pred_scaled
+
+print(df_test[['creditworthiness_score']].head(10))
+
+# ----------------------------
+# 6) Feature-level Explainability
+# ----------------------------
+importances = dt_model.feature_importances_
+importance_df = pd.DataFrame(
+    {'feature': X.columns, 'importance': importances}
+).sort_values(by='importance', ascending=False)
+
+print("Feature Importances:\n", importance_df)
+
+plt.figure(figsize=(10,6))
+plt.barh(importance_df['feature'], importance_df['importance'])
+plt.xlabel("Importance")
+plt.title("Decision Tree Feature Importance")
+plt.gca().invert_yaxis()
+plt.show()
+
+# ----------------------------
+# 7) Save scored dataset
+# ----------------------------
+scored_df = X_test.copy()
+scored_df['creditworthiness_score'] = pred_scaled
+output_path = "unified_dataset_credit_scores.csv"
+scored_df.to_csv(output_path, index=False)
+print("✅ Saved scored dataset as:", output_path)
+
+# ----------------------------
+# 8) Download files (Colab)
+# ----------------------------
+from google.colab import files
+files.download(output_path)
+files.download(model_path)   # ✅ Download the saved model
