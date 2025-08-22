@@ -1,0 +1,53 @@
+import pandas as pd
+import glob, os
+
+# ---- Load datasets (assuming df_cr1, df_cr2, df_news already loaded) ----
+df_cr1["dataset"] = "credit_risk"
+df_cr2["dataset"] = "credit_risk_benchmark"
+df_news["dataset"] = "financial_news"
+
+# ---- Step 1: Select only filterable columns ----
+# Credit Risk 1
+keep_cr1 = [c for c in df_cr1.columns if any(k in c.lower() for k in
+    ["loan", "income", "int_rate", "installment", "status", "purpose", "term", "date", "grade", "debt"])]
+df_cr1 = df_cr1[keep_cr1 + ["dataset"]]
+
+# Credit Risk 2
+keep_cr2 = [c for c in df_cr2.columns if any(k in c.lower() for k in
+    ["loan", "income", "int_rate", "installment", "status", "purpose", "term", "date", "grade", "debt"])]
+df_cr2 = df_cr2[keep_cr2 + ["dataset"]]
+
+# News
+keep_news = [c for c in df_news.columns if any(k in c.lower() for k in ["ticker", "date", "sentiment", "label"])]
+df_news = df_news[keep_news + ["dataset"]]
+
+# ---- Step 2: Standardize column names ----
+rename_map = {
+    "issue_d": "date",
+    "publish_date": "date",
+    "date_published": "date",
+    "loan_status": "label",
+    "sentiment": "label",
+    "class": "label"
+}
+
+df_cr1 = df_cr1.rename(columns=rename_map)
+df_cr2 = df_cr2.rename(columns=rename_map)
+df_news = df_news.rename(columns=rename_map)
+
+# ---- Step 3: Align all datasets ----
+all_cols = set(df_cr1.columns) | set(df_cr2.columns) | set(df_news.columns)
+df_cr1 = df_cr1.reindex(columns=all_cols)
+df_cr2 = df_cr2.reindex(columns=all_cols)
+df_news = df_news.reindex(columns=all_cols)
+
+# ---- Step 4: Merge ----
+df_unified = pd.concat([df_cr1, df_cr2, df_news], ignore_index=True)
+print("Unified dataset shape (cleaned):", df_unified.shape)
+
+# ---- Step 5: Save & Download ----
+unified_path = "/content/final.csv"
+df_unified.to_csv(unified_path, index=False)
+
+from google.colab import files
+files.download(unified_path)
