@@ -1,7 +1,3 @@
-Here’s your **refined version with bold, bigger-font styled headings** (Markdown-style so it looks like a structured doc, presentation, or README):
-
----
-
 # 💳 **PROJECT CREDIFY – TRUSTWORTHY AI FOR REAL-TIME CREDIT RISK INSIGHTS** 🚀
 
 Credit markets transact billions daily, yet traditional credit ratings remain lagging, opaque, and slow to update.
@@ -81,7 +77,3 @@ Credit markets transact billions daily, yet traditional credit ratings remain la
 ---
 
 **Project CREDIFY** is not just another credit scoring model—it represents a step toward transparent, real-time, and equitable financial intelligence. By integrating AI, explainability, and multi-source data fusion, it equips investors, regulators, and institutions with the tools to make faster, more accurate, and more responsible credit decisions.
-
----
-
-👉 Do you want me to style this in a **presentation-ready format (PPTX/Canva style with large bold headings + visuals)** or keep it as a **Markdown README layout** for GitHub?
