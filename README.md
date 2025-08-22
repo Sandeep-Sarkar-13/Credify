@@ -1,78 +1,84 @@
-💳 Project CREDIFY – Real-Time Explainable Credit Intelligence 🚀
-🏦 Introduction
+💳 Project CREDIFY – Trustworthy AI for Real-Time Credit Risk Insights 🚀
 
-Credit markets move billions daily, yet traditional credit ratings are often lagging, opaque, and slow to update.
+Credit markets transact billions daily, yet traditional credit ratings remain lagging, opaque, and slow to update.
 
-💡 Project CREDIFY is an AI-powered, real-time credit intelligence platform that delivers transparent, explainable, and dynamically updated creditworthiness scores.
+Project CREDIFY is an AI-powered, real-time credit intelligence platform that delivers transparent, explainable, and continuously updated creditworthiness scores.
 
-👉 Our mission: Reimagine credit scoring for speed, accuracy, and trust.
+Mission: Redefine credit scoring with speed, accuracy, and trust.
 
-🚀 Key Features
-📊 1️⃣ ADAPTIVE SCORING ENGINE – Real-Time Creditworthiness 💡
+⚡ Key Features
+1️⃣ Adaptive Scoring Engine – Real-Time Creditworthiness
 
-👉 Decision Tree Regression Classifier for dynamic score generation.
-👉 Incremental Learning ensures models stay updated with fresh data.
-👉 Multi-Sector Coverage – scalable to dozens of issuers & asset classes.
+Decision Tree Regression Classifier for dynamic score generation.
 
-🧠 2️⃣ EXPLAINABILITY LAYER – Transparent & Trustworthy 🔍
+Incremental learning to continuously incorporate new data.
 
-👉 Feature Contribution Breakdown – see exactly what drives the score.
-👉 Short vs Long-Term Trends for deeper insights.
-👉 Plain-Language Summaries for non-technical stakeholders.
-👉 Evidence-Backed Reasoning from structured + unstructured data.
+Multi-sector coverage, scalable to numerous issuers and asset classes.
 
-📡 3️⃣ DATA INGESTION – Multi-Source Integration 🌐
+2️⃣ Explainability Layer – Transparency and Trust
 
-👉 Structured Data: SEC EDGAR, Yahoo Finance, World Bank/FRED, energy & shipping indices.
-👉 Unstructured Data: News headlines, press releases, social media sentiment.
-👉 Near-Real-Time Updates with fault tolerance for outages.
-👉 Cleaning, Normalization & Feature Engineering for consistency.
+Feature contribution breakdown to highlight score drivers.
 
-📈 4️⃣ ANALYST DASHBOARD – Interactive Insights 💻
+Short- vs. long-term trend analysis for deeper insights.
 
-👉 Score Trends Over Time 📊
-👉 Feature Importance Visualizations 🔎
-👉 Filters & Comparisons vs. traditional agency ratings
-👉 Alerts for Sudden Score Changes ⚡
+Plain-language summaries for non-technical stakeholders.
 
-💡 Why Project CREDIFY?
+Evidence-based reasoning from both structured and unstructured data.
 
-👉 Real-Time Scoring vs. Delayed Ratings ⏳
-👉 Explainable AI Instead of Black Box Models 🧩
-👉 Multi-Source Data Fusion for Accuracy 🌍
-👉 Analyst-Friendly Dashboard with Alerts 📲
+3️⃣ Data Ingestion – Multi-Source Integration
 
-⚙ Tech Stack 🚀
-🧠 Model Development
+Structured Data: SEC EDGAR filings, Yahoo Finance, World Bank, FRED, energy and shipping indices.
 
-🐍 Python | 📊 scikit-learn | 🔢 NumPy & Pandas | 📉 Matplotlib & Seaborn
+Unstructured Data: News headlines, press releases, social media sentiment.
 
-📡 Data Layer
+Near real-time updates with fault tolerance.
 
-📑 SEC EDGAR Filings | 💹 Yahoo Finance API | 🌍 World Bank / FRED Data | 📰 News & Sentiment Analysis
+Data cleaning, normalization, and feature engineering for consistency.
 
-🌐 Web Stack
+4️⃣ Analyst Dashboard – Interactive Insights
 
-⚛ React.js | 🟢 Node.js | 🚀 Express.js | 🌳 MongoDB | 🎨 HTML / CSS / JavaScript | 📊 Streamlit
+Visualization of score trends over time 📊
 
-☁ Deployment
+Feature importance and explainability visualizations 🔎
 
-🐳 Docker | ☁ AWS / GCP / Render | 🔄 Basic MLOps (Auto-refresh & Retraining)
+Comparative views against traditional agency ratings
 
-🤝 Contributors 💡
+Alerts for significant or sudden score changes ⚠️
 
-👨‍💻 Team CREDIFY – Data scientists, AI engineers, and innovators working to build trust in financial intelligence.
+💡 Why CREDIFY?
 
-🧠 Sandeep Sarkar – ML Engineer
+Real-time scoring vs. delayed traditional ratings.
 
-🤖 Atyasha Bhattacharyya – AI/ML Developer
+Explainable AI instead of opaque black-box models.
 
-💻 Subhanjan Saha – Full Stack Developer
+Multi-source data fusion for higher accuracy.
 
-🚀 Let’s Transform Credit Scoring!
+Analyst-friendly dashboard with actionable insights.
 
-Credify is not just another model – it’s a step towards transparent, real-time, and fair credit intelligence.
+⚙ Tech Stack
 
-💡 By integrating AI, explainability, and multi-source data fusion, we empower investors, regulators, and institutions with the tools they need to make smarter, faster, and more responsible decisions.
+Model Development
 
-🔗 #Credify #CreditScoring #AI #ExplainableAI #FinTechInnovation
+Python, scikit-learn, NumPy, Pandas, Matplotlib, Seaborn
+
+Data Layer
+
+SEC EDGAR, Yahoo Finance API, World Bank / FRED data, News & Sentiment Analysis
+
+Web Stack
+
+React.js, Node.js, Express.js, MongoDB, HTML/CSS/JavaScript, Streamlit
+
+Deployment
+
+Docker, AWS/GCP/Render, basic MLOps (auto-refresh and retraining pipelines)
+
+🤝 Contributors
+
+Sandeep Sarkar – ML Engineer
+
+Atyasha Bhattacharyya – AI/ML Developer
+
+Subhanjan Saha – Full Stack Developer
+
+Project CREDIFY is not just another credit scoring model—it represents a step toward transparent, real-time, and equitable financial intelligence. By integrating AI, explainability, and multi-source data fusion, it equips investors, regulators, and institutions with the tools to make faster, more accurate, and more responsible credit decisions.
