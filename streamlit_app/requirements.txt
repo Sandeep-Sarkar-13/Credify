@@ -1,7 +1,7 @@
-streamlit
-pandas
-numpy
-joblib
-matplotlib
-scikit-learn
-treeinterpreter
+streamlit>=1.37.0
+pandas>=2.2.0
+numpy>=1.26.0
+joblib>=1.3.0
+matplotlib>=3.8.0
+scikit-learn>=1.3.0
+shap>=0.44.0
