@@ -1,0 +1,106 @@
+import pandas as pd
+import numpy as np
+from treeinterpreter import treeinterpreter as ti
+from datetime import datetime
+
+# ----------------------------
+# 1) Load previously scored dataset
+# ----------------------------
+df_test = pd.read_csv("/content/drive/MyDrive/unified_dataset_credit_scores.csv")
+print("Scored dataset shape:", df_test.shape)
+
+# ----------------------------
+# 2) Prepare feature matrix for TreeInterpreter
+# ----------------------------
+# Extract numeric features (exclude identifiers and target)
+feature_cols = [c for c in df_test.columns if c not in ['issuer_id','last_updated','creditworthiness_score']]
+X_test = df_test[feature_cols].copy()
+
+# ----------------------------
+# 2a) Align features with training
+# ----------------------------
+# dt_model was trained with 'X' dataframe
+train_features = X.columns.tolist()  # X used during dt_model.fit()
+
+# Fill missing columns with 0
+for col in train_features:
+    if col not in X_test.columns:
+        print(f"⚠️ Column missing in test set: {col}, filling with 0")
+        X_test[col] = 0
+
+# Reorder columns to match training order
+X_test = X_test[train_features]
+
+# ----------------------------
+# 3) Compute feature contributions
+# ----------------------------
+prediction, bias, contributions = ti.predict(dt_model, X_test)
+
+# Add contributions to dataframe
+contrib_df = pd.DataFrame(contributions, columns=[f"{c}_contrib" for c in train_features])
+df_explain = X_test.reset_index(drop=True).copy()
+df_explain = pd.concat([df_explain, contrib_df], axis=1)
+df_explain['predicted_score'] = prediction
+
+# ----------------------------
+# 4) Add issuer_id & last_updated
+# ----------------------------
+if 'issuer_id' in df_test.columns:
+    df_explain['issuer_id'] = df_test['issuer_id']
+else:
+    df_explain['issuer_id'] = np.arange(len(df_explain))
+
+if 'last_updated' in df_test.columns:
+    df_explain['last_updated'] = pd.to_datetime(df_test['last_updated'])
+else:
+    df_explain['last_updated'] = pd.Timestamp.now()
+
+# ----------------------------
+# 5) Compute short-term & long-term trends
+# ----------------------------
+df_explain = df_explain.sort_values(by=['issuer_id','last_updated'])
+df_explain['short_term_trend'] = df_explain.groupby('issuer_id')['predicted_score'].transform(lambda x: x.rolling(3, min_periods=1).mean())
+df_explain['long_term_trend'] = df_explain.groupby('issuer_id')['predicted_score'].transform(lambda x: x.rolling(10, min_periods=1).mean())
+
+# ----------------------------
+# 6) Structured + Unstructured Reasoning (Corrected Formatting)
+# ----------------------------
+def explain_row(row):
+    # Extract contribution columns
+    contrib_cols = [c for c in df_explain.columns if c.endswith("_contrib")]
+
+    # Get top 3 contributors sorted by absolute impact (largest positive/negative)
+    top_features = row[contrib_cols].sort_values(key=lambda x: abs(x), ascending=False).head(3)
+
+    reasoning = "Top contributing features:\n"
+    for f, val in top_features.items():
+        feature_name = f.replace("_contrib", "")
+        feature_value = row[feature_name] if feature_name in row else "NA"
+        reasoning += f"- {feature_name}: value={feature_value:.3f}, contribution={val:.3f}\n"
+
+    # Add sentiment-based reasoning
+    if 'news_pos_ratio' in row and row['news_pos_ratio'] > 0.5:
+        reasoning += "- Positive news sentiment is high, boosting score.\n"
+    if 'news_neg_ratio' in row and row['news_neg_ratio'] > 0.5:
+        reasoning += "- Negative news sentiment is high, reducing score.\n"
+
+    # Add short/long term trend summary
+    reasoning += f"- Short-term trend: {row['short_term_trend']:.2f}, Long-term trend: {row['long_term_trend']:.2f}\n"
+
+    return reasoning
+
+# Apply to dataset
+df_explain['explanation'] = df_explain.apply(explain_row, axis=1)
+
+# ----------------------------
+# 7) Preview (nicer display)
+# ----------------------------
+preview_cols = ['issuer_id','predicted_score','short_term_trend','long_term_trend','explanation']
+print(df_explain[preview_cols].head(5).to_string(index=False))
+
+# ----------------------------
+# 8) Save full explainable dataset
+# ----------------------------
+output_path = "unified_dataset_credit_scores_explained.csv"
+df_explain.to_csv(output_path, index=False)
+print("✅ Saved explainable dataset as:", output_path)
