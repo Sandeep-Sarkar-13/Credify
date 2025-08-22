@@ -1,0 +1,33 @@
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+
+def preprocess_credit_risk(df):
+    df = df.copy()
+
+    # Drop duplicates
+    df.drop_duplicates(inplace=True)
+
+    # Handle missing values
+    df.fillna({
+        'person_age': df['person_age'].median(),
+        'person_income': df['person_income'].median()
+    }, inplace=True)
+
+    # Encode categorical variables
+    cat_cols = df.select_dtypes(include=['object']).columns
+    le = LabelEncoder()
+    for col in cat_cols:
+        df[col] = le.fit_transform(df[col].astype(str))
+
+    # Feature engineering
+    df['income_to_loan_ratio'] = df['person_income'] / (df['loan_amnt'] + 1)
+    df['payment_to_income_ratio'] = df['loan_int_rate'] * df['loan_amnt'] / (df['person_income'] + 1)
+
+    # Scale numeric features
+    num_cols = df.select_dtypes(include=['int64','float64']).columns
+    scaler = StandardScaler()
+    df[num_cols] = scaler.fit_transform(df[num_cols])
+
+    return df
+
+df_cr1_fe = preprocess_credit_risk(df_cr1)
+print("Credit Risk Dataset engineered:", df_cr1_fe.shape)
